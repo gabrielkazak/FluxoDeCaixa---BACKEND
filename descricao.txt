@@ -1,0 +1,4 @@
+Sistema de Movimentação de Caixa  
+   - Registro de entradas/saídas de valores (categorizadas por tipo: vendas, despesas, investimentos).  
+   - Dashboard com: saldo atual, gráficos de fluxo mensal, projeções financeiras e relatórios históricos.
+   - Usuário Admin pode criar outros usuários
