@@ -1,8 +1,12 @@
-const express = require("express");
+import express from 'express';
+import router from './routes/userRoutes';
+
 const app = express();
-const userRoutes = require("./routes/userRoutes");
-
 app.use(express.json());
-app.use(userRoutes);
 
-app.listen(3000, () => console.log("API REST rodando na porta 3000"));
+app.use('/api', router); 
+
+app.listen(3000, () => {
+  console.log('Servidor rodando');
+});
+
