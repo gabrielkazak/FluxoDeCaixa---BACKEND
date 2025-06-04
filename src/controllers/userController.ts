@@ -6,7 +6,6 @@ export const getAllUsers = async (): Promise<User[]> => {
   return await prisma.user.findMany();
 };
 
-// Buscar usuário por ID
 export const getUserById = async (id: number): Promise<User | null> => {
   return await prisma.user.findUnique({
     where: { id },
