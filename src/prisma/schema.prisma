@@ -12,6 +12,33 @@ model User {
   id    Int     @id @default(autoincrement())
   name  String
   email String  @unique
+
+  fluxosCaixa   FluxoCaixa[]
 }
+
+model FluxoCaixa {
+  id               Int       @id @default(autoincrement())
+  idUsuario        Int
+  tipo             TipoMovimentacao
+  classificacao    ClassificacaoMovimentacao
+  valor            Decimal   @db.Decimal(10,2)
+  saldo            Decimal   @db.Decimal(10,2)
+  dataMovimentacao DateTime
+  descricao        String? 
+
+  usuario          User      @relation(fields: [idUsuario], references: [id])
+}
+
+enum TipoMovimentacao {
+  Entrada
+  Saida
+}
+
+enum ClassificacaoMovimentacao {
+  Venda
+  Compra
+  Investimento
+}
+
 
 
