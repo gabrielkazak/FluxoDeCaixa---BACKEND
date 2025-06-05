@@ -45,8 +45,8 @@ router.get('/users/:id', async (req: Request, res: Response): Promise<void> => {
 // Criar novo usuário
 router.post('/users', async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name, email } = req.body;
-    const user = await createUser(name, email);
+    const { name, email, password, role } = req.body;
+    const user = await createUser(name, email, password, role);
     res.status(201).json({ message: 'Usuário criado com sucesso!', user });
   } catch (error) {
     res.status(500).json({ error: 'Erro ao criar usuário' });
@@ -57,14 +57,14 @@ router.post('/users', async (req: Request, res: Response): Promise<void> => {
 router.put('/users/:id', async (req: Request, res: Response): Promise<void> => {
   try {
     const id = Number(req.params.id);
-    const { name, email } = req.body;
+    const { name, email, password, role } = req.body;
 
     if (isNaN(id)) {
       res.status(400).json({ error: 'ID inválido' });
       return;
     }
 
-    const user = await updateUser(id, name, email);
+    const user = await updateUser(id, name, email, password, role);
     res.json({ message: 'Usuário atualizado com sucesso!', user });
   } catch (error) {
     res.status(500).json({ error: 'Erro ao atualizar usuário' });

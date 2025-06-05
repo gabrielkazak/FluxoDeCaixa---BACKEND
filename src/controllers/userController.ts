@@ -6,6 +6,7 @@ export const getAllUsers = async (): Promise<User[]> => {
   return await prisma.user.findMany();
 };
 
+// Buscar usuário por ID
 export const getUserById = async (id: number): Promise<User | null> => {
   return await prisma.user.findUnique({
     where: { id },
@@ -13,17 +14,17 @@ export const getUserById = async (id: number): Promise<User | null> => {
 };
 
 // Criar novo usuário
-export const createUser = async (name: string, email: string): Promise<User> => {
+export const createUser = async (name: string, email: string, password: string, role: string): Promise<User> => {
   return await prisma.user.create({
-    data: { name, email },
+    data: { name, email, password, role },
   });
 };
 
 // Atualizar usuário
-export const updateUser = async (id: number, name: string, email: string): Promise<User> => {
+export const updateUser = async (id: number, name: string, email: string, password: string, role: string): Promise<User> => {
   return await prisma.user.update({
     where: { id },
-    data: { name, email },
+    data: { name, email, password, role },
   });
 };
 
