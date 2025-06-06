@@ -23,6 +23,7 @@
     "typeorm": "^0.3.24"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.2",
     "@types/node": "^22.15.26",
     "prisma": "^6.8.2",

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../database/prisma';
+import userModel from '../models/userModel';
 
 // Registro
 export const register = async (req: Request, res: Response): Promise<void> => {

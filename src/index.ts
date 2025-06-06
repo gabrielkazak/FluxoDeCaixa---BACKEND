@@ -13,4 +13,3 @@ app.use('/api', authRoutes);
 app.listen(3000, () => {
   console.log('Servidor rodando');
 });
-
