@@ -17,10 +17,10 @@ interface LoginData {
 const userModel = {
   async register({ name, email, password, role }: RegisterData) {
     const existingUser = await prisma.user.findUnique({ where: { email } });
+    
     if (existingUser) {
       throw new Error('Email já está em uso.');
     }
-
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const user = await prisma.user.create({

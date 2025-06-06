@@ -3,8 +3,8 @@ import { getAllUsers, updateUser, deleteUser } from '../controllers/userControll
 
 const router = Router();
 
-router.get('/users', getAllUsers);
-router.put('/users/:id', updateUser);
-router.delete('/users/:id', deleteUser);
+router.get('/users', getAllUsers); //Testado
+router.put('/users/:id', updateUser); //Testado
+router.delete('/users/:id', deleteUser); //Testado
 
 export default router;
