@@ -1,36 +1,36 @@
-import { User } from '@prisma/client';
-import prisma from '../database/prisma';
+import { Request, Response } from 'express';
+import userModel from '../models/userModel';
 
 // Buscar todos os usuários
-export const getAllUsers = async (): Promise<User[]> => {
-  return await prisma.user.findMany();
-};
-
-// Buscar usuário por ID
-export const getUserById = async (id: number): Promise<User | null> => {
-  return await prisma.user.findUnique({
-    where: { id },
-  });
-};
-
-// Criar novo usuário
-export const createUser = async (name: string, email: string, password: string, role: string): Promise<User> => {
-  return await prisma.user.create({
-    data: { name, email, password, role },
-  });
+export const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await userModel.getAll();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar usuários.' });
+  }
 };
 
 // Atualizar usuário
-export const updateUser = async (id: number, name: string, email: string, password: string, role: string): Promise<User> => {
-  return await prisma.user.update({
-    where: { id },
-    data: { name, email, password, role },
-  });
+export const updateUser = async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const { name, email, password, role } = req.body;
+
+  try {
+    const updatedUser = await userModel.update(id, name, email, password, role);
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao atualizar usuário.' });
+  }
 };
 
 // Deletar usuário
-export const deleteUser = async (id: number): Promise<User> => {
-  return await prisma.user.delete({
-    where: { id },
-  });
+export const deleteUser = async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  try {
+    const deletedUser = await userModel.delete(id);
+    res.json({ message: 'Usuário deletado com sucesso.', deletedUser });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao deletar usuário.' });
+  }
 };
