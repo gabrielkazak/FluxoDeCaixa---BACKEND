@@ -9,16 +9,18 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  name  String
-  email String  @unique
-  password String
-  role RoleType
+  id                 Int @id @default(autoincrement())
+  name               String
+  email              String    @unique
+  password           String
+  role               RoleType
   resetPasswordToken String?
-  resetTokenExpiry DateTime?
-
-  fluxosCaixa   FluxoCaixa[]
+  resetTokenExpiry   DateTime?
+  loginTries         Int       @default(0)
+  blockedUntil       DateTime?
+  fluxosCaixa        FluxoCaixa[]
 }
+
 
 enum RoleType {
   admin

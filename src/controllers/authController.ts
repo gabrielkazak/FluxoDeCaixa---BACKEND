@@ -3,7 +3,6 @@ import userModel from '../models/userModel';
 import { RoleType } from '@prisma/client';
 
 import jwt from 'jsonwebtoken';
-import { ref } from 'process';
 const JWT_SECRET = process.env.JWT_SECRET || 'defaultsecret';
 const REFRESH_SECRET = process.env.REFRESH_SECRET || 'defaultrefreshsecret';
 
@@ -62,6 +61,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     secure: process.env.NODE_ENV === 'production', // true em produção (HTTPS)
     sameSite: 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
+    path: '/',
     })
 
     res.status(200).json({
@@ -75,7 +75,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     accessToken,
     });
   } catch (error) {
-    res.status(401).json({ error: (error as Error).message });
+    const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+    res.status(401).json({ message: errorMessage });
   }
 };
 
