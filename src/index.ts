@@ -3,8 +3,10 @@ import userRoutes from './routes/userRoutes';
 import flowRoutes from './routes/flowRoutes';
 import authRoutes from './routes/authRoutes';
 import recPasswordRoutes from './routes/recPasswordRoutes';
+import cors from 'cors';
 
 const app = express();
+app.use(cors())
 app.use(express.json());
 
 app.use('/api', userRoutes);
