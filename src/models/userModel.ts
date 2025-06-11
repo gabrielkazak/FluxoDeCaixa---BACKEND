@@ -33,20 +33,34 @@ const userModel = {
 
 
   async login({ email, password }: LoginData) {
-    const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.user.findUnique({ where: { email } });
 
-    if (!user) {
-      throw new Error('Usuário não encontrado.');
+  if (!user) {
+    throw new Error('Usuário não encontrado.');
+    }
+    
+  if (user.blockedUntil && user.blockedUntil > new Date()) {
+    throw new Error('Usuário bloqueado. Tente novamente mais tarde.');
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    const updatedUser = await prisma.user.update({where: { email }, data: {loginTries: { increment: 1 },},});
+
+    if (updatedUser.loginTries >= 5) {
+      await prisma.user.update({ where: { email }, data: { blockedUntil: new Date(Date.now() + 15 * 60 * 1000), loginTries: 0,},});
+      throw new Error('Usuário bloqueado por muitas tentativas de login. Tente novamente mais tarde.');
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    throw new Error('Senha inválida.');
+  }
 
-    if (!isPasswordValid) {
-      throw new Error('Senha inválida.');
-    }
+  await prisma.user.update({ where: { email }, data: { loginTries: 0, blockedUntil: null,},});
 
-    return { name: user.name, email: user.email, role: user.role };
-  },
+  return { id: user.id, name: user.name, email: user.email, role: user.role,};
+},
+
 
   async findEmail(email: string): Promise<boolean> {
     const user = await prisma.user.findUnique({ where: { email } });
