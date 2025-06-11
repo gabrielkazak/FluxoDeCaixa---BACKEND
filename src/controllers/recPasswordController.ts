@@ -29,7 +29,7 @@ export const sendRecoveryEmail = async (req: Request, res: Response): Promise<vo
 
     await userModel.insertToken(email, token, expiryDate);
 
-    const linkRecuperacao = `https://localhost:3000/resetar-senha?token=${encodeURIComponent(token)}`;
+    const linkRecuperacao = `http://localhost:5173/forgot-password?token=${encodeURIComponent(token)}`;
 
     const msg = {
         to: email,

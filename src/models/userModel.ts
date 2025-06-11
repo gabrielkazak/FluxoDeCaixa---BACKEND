@@ -45,7 +45,7 @@ const userModel = {
       throw new Error('Senha inválida.');
     }
 
-    return { name: user.name, email: user.email, role: user.role };
+    return { id: user.id, name: user.name, email: user.email, role: user.role };
   },
 
   async findEmail(email: string): Promise<boolean> {
