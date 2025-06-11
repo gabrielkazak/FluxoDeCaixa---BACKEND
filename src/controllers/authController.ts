@@ -22,7 +22,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     const user = await userModel.register({ name, email, password, role: roleController });
     res.status(201).json({ message: 'Usuário registrado com sucesso!', user });
   } catch (error) {
-    res.status(400).json({ error: (error as Error).message });
+    res.status(400).json({ message: (error as Error).message });
   }
 };
 
