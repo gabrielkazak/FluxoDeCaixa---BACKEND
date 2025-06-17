@@ -21,7 +21,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     }
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET) as { 
+      const decoded = jwt.verify(token, JWT_SECRET) as { 
       id: number,
       email: string,
       role: string

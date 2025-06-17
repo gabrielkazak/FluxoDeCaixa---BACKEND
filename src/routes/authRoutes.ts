@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { register, login, refreshToken, logout } from '../controllers/authController';
+import { authMiddleware } from '../middlewares/authMiddleware';
+import { roleMiddleware } from '../middlewares/roleMiddleware';
 
 const router = Router();
 
@@ -71,7 +73,7 @@ const router = Router();
  *                   type: string
  *                   example: Informações Faltantes
  */
-router.post('/auth/register', register);
+router.post('/auth/register', authMiddleware, roleMiddleware, register);
 
 /**
  * @swagger
