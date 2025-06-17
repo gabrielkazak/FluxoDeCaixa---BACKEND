@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { 
+  getAllFlows,
   getAllFlowsByUserId,
   getFlowById,
   getAllFlowByDate,
@@ -12,6 +13,8 @@ import { updateBalanceMiddleware } from '../middlewares/flowMiddleware';
 import { authMiddleware } from '../middlewares/authMiddleware';
 
 const router = Router();
+
+router.get('/flows/all', authMiddleware, getAllFlows)
 
 // Buscar todas as movimentações de um usuário
 router.get('/flows/user/:id', authMiddleware, getAllFlowsByUserId); //testada

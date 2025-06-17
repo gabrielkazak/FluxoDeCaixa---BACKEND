@@ -13,6 +13,11 @@ interface FlowData {
 
 
 const flowModel = {
+
+  async getAllFlows() {
+    return await prisma.fluxoCaixa.findMany();
+  },
+
   async getAllByUserId(idUsuario: number) {
     return await prisma.fluxoCaixa.findMany({
       where: { idUsuario },
