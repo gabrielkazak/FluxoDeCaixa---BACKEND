@@ -3,6 +3,17 @@ import flowModel from '../models/flowModel';
 import { updateBalanceAfterEdit } from '../middlewares/updateFlowMiddleware';
 
 // Buscar todas as movimentações de um usuário
+export const getAllFlows = async (req: Request, res: Response) => {
+  try {
+    const flows = await flowModel.getAllFlows();
+    res.json(flows);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar movimentações.' });
+  }
+};
+
+
+// Buscar todas as movimentações de um usuário
 export const getAllFlowsByUserId = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   try {
