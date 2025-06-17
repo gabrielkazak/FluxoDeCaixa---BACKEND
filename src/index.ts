@@ -10,7 +10,6 @@ import swaggerSpec from '../src/documentation/swaggerConfig';
 
 const app = express();
 
-
 app.use(cors())
 app.use(express.json());
 app.use(cookieParser());
@@ -25,3 +24,5 @@ app.use('/api', recPasswordRoutes);
 app.listen(3000, () => {
   console.log('Servidor rodando');
 });
+
+export default app;

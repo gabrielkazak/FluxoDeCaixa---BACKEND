@@ -33,11 +33,18 @@ model FluxoCaixa {
   tipo             TipoMovimentacao
   classificacao    ClassificacaoMovimentacao
   valor            Decimal   @db.Decimal(10,2)
-  saldo            Decimal   @db.Decimal(10,2)
+  formaPagamento   FormaPagamento
   dataMovimentacao DateTime
   descricao        String? 
 
   usuario          User      @relation(fields: [idUsuario], references: [id])
+}
+
+model SaldoAtual {
+  id          Int     @id @default(autoincrement())
+  saldoConta  Decimal @db.Decimal(10,2)
+  saldoCaixa  Decimal @db.Decimal(10,2)
+  data        DateTime
 }
 
 enum TipoMovimentacao {
@@ -45,11 +52,17 @@ enum TipoMovimentacao {
   Saida
 }
 
+enum FormaPagamento {
+  Pix
+  Dinheiro
+  Cartao
+}
+
 enum ClassificacaoMovimentacao {
   Venda
   Compra
   Investimento
+  PrestacaoServico
+  GastoFixo
 }
-
-
 

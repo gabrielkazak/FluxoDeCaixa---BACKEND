@@ -2,26 +2,33 @@ import { Router } from 'express';
 import { 
   getAllFlowsByUserId,
   getFlowById,
+  getAllFlowByDate,
   createFlow,
   updateFlow,
   deleteFlow
 } from '../controllers/flowController';
 
+import { updateBalanceMiddleware } from '../middlewares/flowMiddleware';
+import { authMiddleware } from '../middlewares/authMiddleware';
+
 const router = Router();
 
 // Buscar todas as movimentações de um usuário
-router.get('/flows/user/:id', getAllFlowsByUserId); // GET /flows/user/id testada
+router.get('/flows/user/:id', authMiddleware, getAllFlowsByUserId); //testada
 
 // Buscar uma movimentação específica
-router.get('/flows/:id', getFlowById); // GET /flows/id testada
+router.get('/flows/:id', authMiddleware, getFlowById); //testada
+
+//Buscar todas as Movimentações de uma data
+router.get('/flows/data/:data', authMiddleware, getAllFlowByDate); //testada
 
 // Criar nova movimentação
-router.post('/flows', createFlow); // POST /flows testada
+router.post('/flows', authMiddleware, updateBalanceMiddleware, createFlow); //testada
 
 // Atualizar movimentação existente
-router.put('/flows/:id', updateFlow); // PUT /flows/id testada
+router.put('/flows/:id', authMiddleware, updateFlow); //testada
 
 // Deletar movimentação
-router.delete('/flows/:id', deleteFlow); // DELETE /flows/id testada
+router.delete('/flows/:id', authMiddleware, deleteFlow); //testada
 
 export default router;

@@ -107,8 +107,7 @@ router.get('/users', authMiddleware, roleMiddleware, getAllUsers);
  *       500:
  *         description: Erro ao atualizar usuário.
  */
-router.put('/users/:id', authMiddleware, updateUser);
-
+router.put('/users/:id', authMiddleware, roleMiddleware, updateUser);
 
 /**
  * @swagger
@@ -159,6 +158,6 @@ router.put('/users/:id', authMiddleware, updateUser);
  *       500:
  *         description: Erro ao deletar usuário.
  */
-router.delete('/users/:id', authMiddleware, deleteUser);
+router.delete('/users/:id', authMiddleware, roleMiddleware, deleteUser);
 
 export default router;
