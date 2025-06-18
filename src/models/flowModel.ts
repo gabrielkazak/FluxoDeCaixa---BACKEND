@@ -9,6 +9,7 @@ interface FlowData {
   formaPagamento: FormaPagamento;
   dataMovimentacao: Date;
   descricao?: string;
+  alterado?: string;
 }
 
 
@@ -42,11 +43,13 @@ const flowModel = {
       },
     },
   });
-},
+  },
 
+  async getBalance() {
+    return await prisma.saldoAtual.findFirst({ orderBy: { data: 'desc' } })
+  },
 
-
-  async create({ idUsuario, tipo, classificacao, valor, formaPagamento, dataMovimentacao, descricao,}: FlowData) {
+  async create({ idUsuario, tipo, classificacao, valor, formaPagamento, dataMovimentacao, descricao}: FlowData) {
     return await prisma.fluxoCaixa.create({
       data: {
         idUsuario,
@@ -60,7 +63,7 @@ const flowModel = {
     });
   },
 
-  async update(id: number,{ idUsuario, tipo, classificacao, valor, formaPagamento, dataMovimentacao, descricao,}: FlowData) {
+  async update(id: number,{ idUsuario, tipo, classificacao, valor, formaPagamento, dataMovimentacao, descricao, alterado}: FlowData) {
     return await prisma.fluxoCaixa.update({
       where: { id },
       data: {
@@ -71,6 +74,7 @@ const flowModel = {
         formaPagamento,
         dataMovimentacao,
         descricao,
+        alterado
       },
     });
   },

@@ -3,6 +3,7 @@ import {
   getAllFlows,
   getAllFlowsByUserId,
   getFlowById,
+  getBalance,
   getAllFlowByDate,
   createFlow,
   updateFlow,
@@ -14,7 +15,12 @@ import { authMiddleware } from '../middlewares/authMiddleware';
 
 const router = Router();
 
-router.get('/flows/all', authMiddleware, getAllFlows)
+
+//Buscar o saldo
+router.get('/balance', authMiddleware, getBalance); //Testada
+
+//Busca todas as movimentações
+router.get('/flows/all', authMiddleware, getAllFlows) //testada
 
 // Buscar todas as movimentações de um usuário
 router.get('/flows/user/:id', authMiddleware, getAllFlowsByUserId); //testada

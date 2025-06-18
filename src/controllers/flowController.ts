@@ -35,6 +35,16 @@ export const getFlowById = async (req: Request, res: Response) => {
   }
 };
 
+export const getBalance = async (req: Request, res: Response) => {
+  try {
+    const balance = await flowModel.getBalance();
+    res.json(balance)
+  } catch (error) {
+    console.error('Erro no getBalance:', error);
+    res.status(500).json({ error: 'Erro ao buscar saldo.', detalhes: error });
+  }
+}
+
 export const getAllFlowByDate = async (req: Request, res: Response) => {
   const data = new Date(req.params.data);
   try {
@@ -85,6 +95,7 @@ export const updateFlow = async (req: Request, res: Response) => {
       formaPagamento,
       dataMovimentacao: new Date(dataMovimentacao),
       descricao,
+      alterado: 'Sim'
     });
 
     await updateBalanceAfterEdit(movimentacaoAntiga, atualizada);

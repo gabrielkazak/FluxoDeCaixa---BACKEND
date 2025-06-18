@@ -35,7 +35,8 @@ model FluxoCaixa {
   valor            Decimal   @db.Decimal(10,2)
   formaPagamento   FormaPagamento
   dataMovimentacao DateTime
-  descricao        String? 
+  descricao        String?
+  alterado         String?
 
   usuario          User      @relation(fields: [idUsuario], references: [id])
 }
