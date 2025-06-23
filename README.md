@@ -100,6 +100,7 @@ git clone <https://github.com/gabrielkazak/FluxoDeCaixa---BACKEND>
 npm install
 
 npm run start
+```
 
 ## Configurações
 
