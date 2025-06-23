@@ -45,21 +45,20 @@ export const sendRecoveryEmail = async (req: Request, res: Response): Promise<vo
                 <title>Recuperação de Senha</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1">
                 <style>
-                    /* ... (coloque todo o CSS inline aqui) ... */
                     body, html { margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
                     table { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
                     img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
                     p { Margin: 0; padding: 0; }
-                    a { text-decoration: none; color: #4CAF50; }
+                    a { text-decoration: none; color: #014F91; }
 
                     .email-body { background-color: #f4f4f4; padding: 20px; }
                     .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); overflow: hidden; }
-                    .header-section { background-color: #4CAF50; padding: 30px 20px; text-align: center; color: #ffffff; }
+                    .header-section { background-color: #014F91; padding: 30px 20px; text-align: center; color: #ffffff; }
                     .header-section h1 { margin: 0; font-size: 28px; font-weight: bold; }
                     .content-section { padding: 30px 20px; color: #333333; line-height: 1.6; font-size: 16px; }
                     .content-section h2 { font-size: 24px; color: #333333; margin-top: 0; margin-bottom: 20px; text-align: center; }
                     .button-container { text-align: center; margin-top: 25px; margin-bottom: 25px; }
-                    .button { display: inline-block; background-color: #4CAF50; color: #ffffff; font-size: 18px; font-weight: bold; text-decoration: none; padding: 15px 30px; border-radius: 5px; transition: background-color 0.3s ease; }
+                    .button { display: inline-block; background-color: #014F91; color: #ffffff; font-size: 18px; font-weight: bold; text-decoration: none; padding: 15px 30px; border-radius: 5px; transition: background-color 0.3s ease; }
                     .footer-section { background-color: #f0f0f0; padding: 20px; text-align: center; font-size: 12px; color: #777777; border-top: 1px solid #eeeeee; }
                     .footer-section p { margin-bottom: 5px; }
                     @media screen and (max-width: 600px) {
@@ -78,7 +77,7 @@ export const sendRecoveryEmail = async (req: Request, res: Response): Promise<vo
                         <td align="center" valign="top">
                             <table cellspacing="0" cellpadding="0" border="0" class="email-container" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); overflow: hidden;">
                                 <tr>
-                                    <td align="center" class="header-section" style="background-color: #4CAF50; padding: 30px 20px; text-align: center; color: #ffffff;">
+                                    <td align="center" class="header-section" style="background-color: #014F91; padding: 30px 20px; text-align: center; color: #ffffff;">
                                         <h1 style="margin: 0; font-size: 28px; font-weight: bold;">
                                             Fluxo de Caixa CIMOL
                                         </h1>
@@ -94,7 +93,7 @@ export const sendRecoveryEmail = async (req: Request, res: Response): Promise<vo
                                             Para continuar com a redefinição da sua senha, clique no botão abaixo:
                                         </p>
                                         <div class="button-container" style="text-align: center; margin-top: 25px; margin-bottom: 25px;">
-                                            <a href="${linkRecuperacao}" class="button" style="display: inline-block; background-color: #4CAF50; color: #ffffff; font-size: 18px; font-weight: bold; text-decoration: none; padding: 15px 30px; border-radius: 5px;">
+                                            <a href="${linkRecuperacao}" class="button" style="display: inline-block; background-color: #014F91; color: #ffffff; font-size: 18px; font-weight: bold; text-decoration: none; padding: 15px 30px; border-radius: 5px;">
                                                 Redefinir Minha Senha
                                             </a>
                                         </div>
@@ -115,7 +114,7 @@ export const sendRecoveryEmail = async (req: Request, res: Response): Promise<vo
                                         <p style="margin-bottom: 0;">
                                             Se você tiver problemas para clicar no botão, copie e cole o link abaixo em seu navegador:
                                             <br>
-                                            <a href="${linkRecuperacao}" style="word-break: break-all; color: #4CAF50;">${linkRecuperacao}</a>
+                                            <a href="${linkRecuperacao}" style="word-break: break-all; color: #014F91;">${linkRecuperacao}</a>
                                         </p>
                                         <p style="margin-top: 10px;">
                                             &copy; 2025 Fluxo de Caixa CIMOL. Todos os direitos reservados.

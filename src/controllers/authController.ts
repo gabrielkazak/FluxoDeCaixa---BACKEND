@@ -81,7 +81,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Refresh Token
-export const refreshToken = (req: Request, res: Response): void => {
+export const refreshToken = async (req: Request, res: Response) => {
   const token = req.cookies.refreshToken;
 
   if (!token) {
@@ -92,8 +92,15 @@ export const refreshToken = (req: Request, res: Response): void => {
   try {
     const payload = jwt.verify(token, REFRESH_SECRET) as { id: number };
 
+    // buscar usuário no banco pra resgatar o role
+    const user = await userModel.findById(payload.id);
+    if (!user) {
+      res.status(404).json({ message: 'Usuário não encontrado.' });
+      return;
+    }
+
     const newAccessToken = jwt.sign(
-      { id: payload.id },
+      { id: user.id, email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: '15m' }
     );
