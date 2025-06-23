@@ -79,7 +79,7 @@ enum ClassificacaoMovimentacao {
   PrestacaoServico
   GastoFixo
 }
-
+```
 ## Autenticação
 
 Utiliza JWT para autenticação e controle de sessões.
