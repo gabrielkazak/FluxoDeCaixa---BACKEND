@@ -61,6 +61,9 @@ const userModel = {
   return { id: user.id, name: user.name, email: user.email, role: user.role,};
 },
 
+  async findById(id: number) {
+  return await prisma.user.findUnique({ where: { id } });
+},
 
   async findEmail(email: string): Promise<boolean> {
     const user = await prisma.user.findUnique({ where: { email } });
@@ -73,14 +76,19 @@ const userModel = {
   },
 
 
-  async update(id: number, name: string, email: string, password: string, role: RoleType) {
-    const hashedPassword = await bcrypt.hash(password, 12);
+  async update(id: number, name: string, email: string, password: string | undefined, role: RoleType) {
+    const dataToUpdate: any = { name, email, role };
+
+    if (password && password.trim() !== '') {
+        const hashedPassword = await bcrypt.hash(password, 12);
+        dataToUpdate.password = hashedPassword;
+    }
 
     return await prisma.user.update({
       where: { id },
-      data: { name, email, password: hashedPassword, role },
+      data: dataToUpdate,
     });
-  },
+},
 
   
   async delete(id: number) {
