@@ -12,7 +12,6 @@ export const getAllFlows = async (req: Request, res: Response) => {
   }
 };
 
-
 // Buscar todas as movimentações de um usuário
 export const getAllFlowsByUserId = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
@@ -38,12 +37,12 @@ export const getFlowById = async (req: Request, res: Response) => {
 export const getBalance = async (req: Request, res: Response) => {
   try {
     const balance = await flowModel.getBalance();
-    res.json(balance)
+    res.json(balance);
   } catch (error) {
     console.error('Erro no getBalance:', error);
     res.status(500).json({ error: 'Erro ao buscar saldo.', detalhes: error });
   }
-}
+};
 
 export const getAllFlowByDate = async (req: Request, res: Response) => {
   const data = new Date(req.params.data);
@@ -57,7 +56,15 @@ export const getAllFlowByDate = async (req: Request, res: Response) => {
 
 // Criar movimentação
 export const createFlow = async (req: Request, res: Response) => {
-  const { idUsuario, tipo, classificacao, valor, formaPagamento, dataMovimentacao, descricao } = req.body;
+  const {
+    idUsuario,
+    tipo,
+    classificacao,
+    valor,
+    formaPagamento,
+    dataMovimentacao,
+    descricao,
+  } = req.body;
   try {
     const novaMov = await flowModel.create({
       idUsuario,
@@ -74,11 +81,18 @@ export const createFlow = async (req: Request, res: Response) => {
   }
 };
 
-
 // Atualizar movimentação com correção de saldo
 export const updateFlow = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
-  const { idUsuario, tipo, classificacao, valor, formaPagamento, dataMovimentacao, descricao } = req.body;
+  const {
+    idUsuario,
+    tipo,
+    classificacao,
+    valor,
+    formaPagamento,
+    dataMovimentacao,
+    descricao,
+  } = req.body;
 
   try {
     const movimentacaoAntiga = await flowModel.getById(id);
@@ -95,7 +109,7 @@ export const updateFlow = async (req: Request, res: Response) => {
       formaPagamento,
       dataMovimentacao: new Date(dataMovimentacao),
       descricao,
-      alterado: 'Sim'
+      alterado: 'Sim',
     });
 
     await updateBalanceAfterEdit(movimentacaoAntiga, atualizada);
@@ -105,8 +119,6 @@ export const updateFlow = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Erro ao atualizar movimentação.' });
   }
 };
-
-
 
 // Deletar movimentação
 export const deleteFlow = async (req: Request, res: Response) => {

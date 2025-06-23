@@ -11,7 +11,11 @@ declare global {
   }
 }
 
-export const roleMiddleware = (req: Request, res: Response, next: NextFunction): void => {
+export const roleMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   const user = req.user;
 
   if (!user || user.role !== 'admin') {

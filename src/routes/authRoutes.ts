@@ -1,5 +1,10 @@
 import { Router } from 'express';
-import { register, login, refreshToken, logout } from '../controllers/authController';
+import {
+  register,
+  login,
+  refreshToken,
+  logout,
+} from '../controllers/authController';
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { roleMiddleware } from '../middlewares/roleMiddleware';
 

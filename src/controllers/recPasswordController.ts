@@ -7,7 +7,10 @@ import crypto from 'crypto';
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
-export const sendRecoveryEmail = async (req: Request, res: Response): Promise<void> => {
+export const sendRecoveryEmail = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { email } = req.body;
 
   if (!email) {
@@ -15,28 +18,28 @@ export const sendRecoveryEmail = async (req: Request, res: Response): Promise<vo
     return;
   }
 
-    try {
+  try {
     const userExiste = await userModel.findEmail(email);
 
     if (!userExiste) {
-    res.status(404).json({ message: 'Usuário não encontrado.' });
-    return;
+      res.status(404).json({ message: 'Usuário não encontrado.' });
+      return;
     }
 
-    
     const token = crypto.randomBytes(32).toString('hex');
     const expiryDate = new Date(Date.now() + 30 * 60 * 1000);
 
     await userModel.insertToken(email, token, expiryDate);
 
-    const linkRecuperacao = `http://localhost:5173/forgot-password?token=${encodeURIComponent(token)}`;
-
+    const linkRecuperacao = `http://localhost:5173/forgot-password?token=${encodeURIComponent(
+      token
+    )}`;
 
     const msg = {
-        to: email,
-        from: 'fluxocaixa.cimol@gmail.com',
-        subject: 'Redefinição de Senha do Fluxo de Caixa CIMOL',
-        html: `
+      to: email,
+      from: 'fluxocaixa.cimol@gmail.com',
+      subject: 'Redefinição de Senha do Fluxo de Caixa CIMOL',
+      html: `
             <!DOCTYPE html>
             <html>
             <head>
@@ -133,15 +136,19 @@ export const sendRecoveryEmail = async (req: Request, res: Response): Promise<vo
     await sgMail.send(msg);
     console.log(`E-mail enviado para ${email}`);
     res.status(200).json({ message: 'E-mail enviado com sucesso!' });
-
-    } catch (error: any) {
-    console.error('Erro ao enviar o e-mail ou processar requisição:', error.message);
+  } catch (error: any) {
+    console.error(
+      'Erro ao enviar o e-mail ou processar requisição:',
+      error.message
+    );
     res.status(500).json({ message: error.message || 'Erro interno.' });
-    }
-}
+  }
+};
 
-
-export const verifyToken = async (req: Request, res: Response): Promise<void> => {
+export const verifyToken = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const token = req.query.token as string;
 
@@ -158,15 +165,16 @@ export const verifyToken = async (req: Request, res: Response): Promise<void> =>
       return;
     }
     res.status(200).json({ message: 'Token válido.' });
-
   } catch (error: any) {
     console.error('Erro ao redefinir ao validar token:', error.message);
     res.status(500).json({ message: error.message || 'Erro interno.' });
   }
-}
+};
 
-
-export const resetPassword = async (req: Request, res: Response): Promise<void> => {
+export const resetPassword = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { newPassword } = req.body;
   const token = req.query.token as string;
 
