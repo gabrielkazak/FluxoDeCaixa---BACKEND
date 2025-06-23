@@ -10,20 +10,25 @@ const REFRESH_SECRET = process.env.REFRESH_SECRET || 'defaultrefreshsecret';
 export const register = async (req: Request, res: Response): Promise<void> => {
   const { name, email, password, role } = req.body;
 
-  if(!name || !email || !password){
-    res.status(400).json({message:"Informações Faltantes"});
-    return
+  if (!name || !email || !password) {
+    res.status(400).json({ message: 'Informações Faltantes' });
+    return;
   }
 
-  if(password.length < 8){
-    res.status(400).json({message:"Senha deve ter no mínimo 8 digitos."});
-    return
+  if (password.length < 8) {
+    res.status(400).json({ message: 'Senha deve ter no mínimo 8 digitos.' });
+    return;
   }
 
   const roleController: RoleType = role ?? 'user';
 
   try {
-    const user = await userModel.register({ name, email, password, role: roleController });
+    const user = await userModel.register({
+      name,
+      email,
+      password,
+      role: roleController,
+    });
     res.status(201).json({ message: 'Usuário registrado com sucesso!', user });
   } catch (error) {
     res.status(400).json({ message: (error as Error).message });
@@ -34,9 +39,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 export const login = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
-  if(!email || !password){
-    res.status(400).json({message:"Informações Faltantes ou Incorretas"});
-    return
+  if (!email || !password) {
+    res.status(400).json({ message: 'Informações Faltantes ou Incorretas' });
+    return;
   }
 
   try {
@@ -48,34 +53,33 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       JWT_SECRET,
       { expiresIn: '15m' }
     );
-    
+
     // Refresh em 7 dias
-    const refreshToken = jwt.sign(
-      { id: user.id },
-      REFRESH_SECRET,
-      { expiresIn: '7d' }
-    );
+    const refreshToken = jwt.sign({ id: user.id }, REFRESH_SECRET, {
+      expiresIn: '7d',
+    });
 
     res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // true em produção (HTTPS)
-    sameSite: 'lax',
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
-    path: '/',
-    })
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // true em produção (HTTPS)
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
+      path: '/',
+    });
 
     res.status(200).json({
-    message: 'Login bem-sucedido!',
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    },
-    accessToken,
+      message: 'Login bem-sucedido!',
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+      accessToken,
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+    const errorMessage =
+      error instanceof Error ? error.message : 'Erro desconhecido';
     res.status(401).json({ message: errorMessage });
   }
 };

@@ -1,5 +1,9 @@
 import { Router } from 'express';
-import { sendRecoveryEmail, resetPassword, verifyToken } from '../controllers/recPasswordController';
+import {
+  sendRecoveryEmail,
+  resetPassword,
+  verifyToken,
+} from '../controllers/recPasswordController';
 
 const router = Router();
 
@@ -66,7 +70,7 @@ const router = Router();
  *                   type: string
  *                   example: Erro interno.
  */
-router.post('/auth/forgot-password', sendRecoveryEmail); // Testado
+router.post('/auth/forgot-password', sendRecoveryEmail);
 
 /**
  * @swagger
@@ -128,7 +132,7 @@ router.post('/auth/forgot-password', sendRecoveryEmail); // Testado
  *                   type: string
  *                   example: Erro interno.
  */
-router.post('/auth/reset-password', resetPassword); //Testado
+router.post('/auth/reset-password', resetPassword);
 
 /**
  * @swagger
@@ -177,6 +181,6 @@ router.post('/auth/reset-password', resetPassword); //Testado
  *                   type: string
  *                   example: Erro interno.
  */
-router.get('/auth/reset-password', verifyToken); // Testado
+router.get('/auth/reset-password', verifyToken);
 
 export default router;

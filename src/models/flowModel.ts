@@ -1,5 +1,9 @@
 import prisma from '../database/prisma';
-import { TipoMovimentacao, ClassificacaoMovimentacao, FormaPagamento } from '@prisma/client';
+import {
+  TipoMovimentacao,
+  ClassificacaoMovimentacao,
+  FormaPagamento,
+} from '@prisma/client';
 
 interface FlowData {
   idUsuario: number;
@@ -12,9 +16,7 @@ interface FlowData {
   alterado?: string;
 }
 
-
 const flowModel = {
-
   async getAllFlows() {
     return await prisma.fluxoCaixa.findMany();
   },
@@ -32,24 +34,51 @@ const flowModel = {
   },
 
   async getByDate(dataMovimentacao: Date) {
-  const startOfDay = new Date(Date.UTC(dataMovimentacao.getUTCFullYear(), dataMovimentacao.getUTCMonth(), dataMovimentacao.getUTCDate(), 0, 0, 0));
-  const endOfDay = new Date(Date.UTC(dataMovimentacao.getUTCFullYear(), dataMovimentacao.getUTCMonth(), dataMovimentacao.getUTCDate(), 23, 59, 59, 999));
+    const startOfDay = new Date(
+      Date.UTC(
+        dataMovimentacao.getUTCFullYear(),
+        dataMovimentacao.getUTCMonth(),
+        dataMovimentacao.getUTCDate(),
+        0,
+        0,
+        0
+      )
+    );
+    const endOfDay = new Date(
+      Date.UTC(
+        dataMovimentacao.getUTCFullYear(),
+        dataMovimentacao.getUTCMonth(),
+        dataMovimentacao.getUTCDate(),
+        23,
+        59,
+        59,
+        999
+      )
+    );
 
-  return await prisma.fluxoCaixa.findMany({
-    where: {
-      dataMovimentacao: {
-        gte: startOfDay,
-        lte: endOfDay,
+    return await prisma.fluxoCaixa.findMany({
+      where: {
+        dataMovimentacao: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
       },
-    },
-  });
+    });
   },
 
   async getBalance() {
-    return await prisma.saldoAtual.findFirst({ orderBy: { data: 'desc' } })
+    return await prisma.saldoAtual.findFirst({ orderBy: { data: 'desc' } });
   },
 
-  async create({ idUsuario, tipo, classificacao, valor, formaPagamento, dataMovimentacao, descricao}: FlowData) {
+  async create({
+    idUsuario,
+    tipo,
+    classificacao,
+    valor,
+    formaPagamento,
+    dataMovimentacao,
+    descricao,
+  }: FlowData) {
     return await prisma.fluxoCaixa.create({
       data: {
         idUsuario,
@@ -63,7 +92,19 @@ const flowModel = {
     });
   },
 
-  async update(id: number,{ idUsuario, tipo, classificacao, valor, formaPagamento, dataMovimentacao, descricao, alterado}: FlowData) {
+  async update(
+    id: number,
+    {
+      idUsuario,
+      tipo,
+      classificacao,
+      valor,
+      formaPagamento,
+      dataMovimentacao,
+      descricao,
+      alterado,
+    }: FlowData
+  ) {
     return await prisma.fluxoCaixa.update({
       where: { id },
       data: {
@@ -74,7 +115,7 @@ const flowModel = {
         formaPagamento,
         dataMovimentacao,
         descricao,
-        alterado
+        alterado,
       },
     });
   },
