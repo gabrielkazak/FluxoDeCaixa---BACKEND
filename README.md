@@ -109,8 +109,6 @@ No arquivo `.env` configure:
 - URL de conexão com o banco de dados
 - Chave da API do serviço de disparo de emails (SendGrid)
 
-## Desenvolvedores
+## Repositório do Frontend
 
-- Arthur dos Reis  
-- Gabriel da Silva Kazakevicius
-
+- https://github.com/gabrielkazak/FluxoDeCaixa---FRONTEND
