@@ -80,6 +80,7 @@ enum ClassificacaoMovimentacao {
   GastoFixo
 }
 ```
+
 ## Autenticação
 
 Utiliza JWT para autenticação e controle de sessões.
@@ -112,3 +113,9 @@ No arquivo `.env` configure:
 ## Repositório do Frontend
 
 - https://github.com/gabrielkazak/FluxoDeCaixa---FRONTEND
+
+## Desenvolvedores
+
+- Arthur dos Reis  
+- Gabriel da Silva Kazakevicius
+
