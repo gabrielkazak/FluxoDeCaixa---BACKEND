@@ -34,6 +34,16 @@ export const getFlowById = async (req: Request, res: Response) => {
   }
 };
 
+export const getAllBalance = async (req: Request, res: Response) => {
+  try {
+    const balance = await flowModel.getAllBalance();
+    res.json(balance);
+  } catch (error) {
+    console.error('Erro no getAllBalance:', error);
+    res.status(500).json({ error: 'Erro ao buscar saldo.', detalhes: error });
+  }
+};
+
 export const getBalance = async (req: Request, res: Response) => {
   try {
     const balance = await flowModel.getBalance();

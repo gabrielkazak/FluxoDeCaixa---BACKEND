@@ -1,0 +1,15 @@
+{
+  "source": {
+    "include": ["src/controllers", "src/models", "src/middlewares"],
+    "includePattern": ".ts$",
+    "excludePattern": "(node_modules|tests)"
+  },
+  "opts": {
+    "destination": "./src/documentation",
+    "recurse": true,
+    "template": "default"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ]
+}

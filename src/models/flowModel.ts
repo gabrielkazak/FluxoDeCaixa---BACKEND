@@ -70,6 +70,10 @@ const flowModel = {
     return await prisma.saldoAtual.findFirst({ orderBy: { data: 'desc' } });
   },
 
+  async getAllBalance() {
+    return await prisma.saldoAtual.findMany();
+  },
+
   async create({
     idUsuario,
     tipo,

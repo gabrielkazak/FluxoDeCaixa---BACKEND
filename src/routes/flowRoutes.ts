@@ -4,6 +4,7 @@ import {
   getAllFlowsByUserId,
   getFlowById,
   getBalance,
+  getAllBalance,
   getAllFlowByDate,
   createFlow,
   updateFlow,
@@ -52,6 +53,44 @@ const router = Router();
  *                   example: Erro detalhado
  */
 router.get('/balance', authMiddleware, getBalance);
+
+/**
+ * @swagger
+ * /balance:
+ *   get:
+ *     summary: Retorna o historico do saldo da conta e do caixa
+ *     tags: [Movimentações]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Saldo retornado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 saldoConta:
+ *                   type: number
+ *                   example: 1520.75
+ *                 saldoCaixa:
+ *                   type: number
+ *                   example: 430.50
+ *       500:
+ *         description: Erro ao buscar saldo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Erro ao buscar saldo.
+ *                 detalhes:
+ *                   type: string
+ *                   example: Erro detalhado
+ */
+router.get('/balance/all', authMiddleware, getAllBalance);
 
 /**
  * @swagger
