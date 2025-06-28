@@ -1,9 +1,10 @@
 import prisma from '../database/prisma';
-import {
-  TipoMovimentacao,
-  ClassificacaoMovimentacao,
-  FormaPagamento,
-} from '@prisma/client';
+
+type ClassificacaoMovimentacao = 'Venda' | 'Compra' | 'Investimento' | 'PrestacaoServico' | 'GastoFixo';
+
+type FormaPagamento = 'Dinheiro' | 'Cartao' | 'Pix';
+
+type TipoMovimentacao = 'Entrada' | 'Saida';
 
 interface FlowData {
   idUsuario: number;

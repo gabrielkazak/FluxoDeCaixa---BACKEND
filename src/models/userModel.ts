@@ -1,7 +1,8 @@
 import prisma from '../database/prisma';
-import { RoleType, User } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
+type RoleType = 'admin' | 'user';
+ 
 interface RegisterData {
   name: string;
   email: string;
