@@ -1,4 +1,4 @@
-# Sistema de Fluxo de Caixa (Backend)
+# 📈💻 Sistema de Fluxo de Caixa (Backend)
 
 ## Descrição
 
@@ -18,6 +18,23 @@ Este é o backend do sistema que gerencia o fluxo de caixa de uma pequena empres
 - Recuperação de senha
 - Autenticação via JWT
 - Controle de acessos por perfil (admin e usuário comum)
+
+## Arquitetura
+
+- 📦 Raiz do Projeto
+- ├── 📄 package.json
+- ├── 📄 tsconfig.json
+- └── 📁 src
+    - ├── 📁 controllers
+    - ├── 📁 database
+    - ├── 📁 documentation
+    - ├── 📁 middlewares
+    - ├── 📁 models
+    - ├── 📁 prisma
+    - ├── 📁 routes
+    - ├── 📄 .env
+    - ├── 📄 index.ts
+
 
 ## Modelo do Banco de Dados
 
