@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
   getAllUsers,
+  testForUser,
   updateUser,
   deleteUser,
 } from '../controllers/userController';
@@ -48,6 +49,29 @@ const router = Router();
  *         description: Erro interno do servidor.
  */
 router.get('/users', authMiddleware, roleMiddleware, getAllUsers);
+
+/**
+ * @swagger
+ * /users/test:
+ *   get:
+ *     tags:
+ *       - User
+ *     summary: Verifica se existe algum usuário cadastrado no banco
+ *     responses:
+ *       200:
+ *         description: Retorna se há ou não usuários cadastrados
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 exists:
+ *                   type: boolean
+ *                   example: true
+ *       500:
+ *         description: Erro interno do servidor.
+ */
+router.get('/users/test', testForUser);
 
 /**
  * @swagger

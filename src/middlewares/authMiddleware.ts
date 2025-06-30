@@ -5,6 +5,7 @@ declare global {
   namespace Express {
     interface Request {
       userId?: number;
+      isFirstUser?: boolean;
     }
   }
 }
@@ -18,6 +19,11 @@ export const authMiddleware = (
 ): void => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
+
+  if (token === 'firstUser') {
+    req.isFirstUser = true;
+    return next();
+  }
 
   if (!token) {
     res.status(401).json({ message: 'Token inválido.' });

@@ -118,4 +118,3 @@ No arquivo `.env` configure:
 
 - Arthur dos Reis  
 - Gabriel da Silva Kazakevicius
-

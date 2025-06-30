@@ -1,8 +1,8 @@
 import prisma from '../database/prisma';
 import bcrypt from 'bcrypt';
 
-type RoleType = 'admin' | 'user';
- 
+type RoleType = 'admin' | 'user'; 
+
 interface RegisterData {
   name: string;
   email: string;
@@ -85,6 +85,10 @@ const userModel = {
 
   async getAll() {
     return await prisma.user.findMany();
+  },
+
+  async testForUser() {
+    return await prisma.user.findFirst();
   },
 
   async update(

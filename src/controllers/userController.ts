@@ -11,6 +11,15 @@ export const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+export const testForUser = async (req: Request, res: Response) => {
+  try {
+    const user = await userModel.testForUser();
+    res.json({ exists: !!user });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar usuários.' });
+  }
+};
+
 // Atualizar usuário
 export const updateUser = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
