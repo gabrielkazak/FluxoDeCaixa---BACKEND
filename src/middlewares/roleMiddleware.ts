@@ -7,6 +7,7 @@ declare global {
     }
     interface Request {
       user?: User;
+      isFirstUser?: boolean;
     }
   }
 }
@@ -16,6 +17,11 @@ export const roleMiddleware = (
   res: Response,
   next: NextFunction
 ): void => {
+
+  if (req.isFirstUser) {
+    return next();
+  }
+
   const user = req.user;
 
   if (!user || user.role !== 'admin') {
