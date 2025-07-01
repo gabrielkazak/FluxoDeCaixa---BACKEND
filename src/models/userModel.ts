@@ -1,5 +1,6 @@
 import prisma from '../database/prisma';
 import bcrypt from 'bcrypt';
+import { Prisma } from '@prisma/client';
 
 type RoleType = 'admin' | 'user'; 
 
@@ -22,10 +23,22 @@ const userModel = {
     if (existingUser) {
       throw new Error('Email já está em uso.');
     }
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const user = await prisma.user.create({
       data: { name, email, password: hashedPassword, role },
+    });
+
+    await prisma.log.create({
+      data: {
+        action: 'CREATE',
+        entity: 'USER',
+        entityId: user.id,
+        before: Prisma.DbNull,
+        after: JSON.parse(JSON.stringify(user)),
+        userId: user.id,
+      },
     });
 
     return { id: user.id, name: user.name, email: user.email, role: user.role };
@@ -34,9 +47,7 @@ const userModel = {
   async login({ email, password }: LoginData) {
     const user = await prisma.user.findUnique({ where: { email } });
 
-    if (!user) {
-      throw new Error('Usuário não encontrado.');
-    }
+    if (!user) throw new Error('Usuário não encontrado.');
 
     if (user.blockedUntil && user.blockedUntil > new Date()) {
       throw new Error('Usuário bloqueado. Tente novamente mais tarde.');
@@ -58,9 +69,8 @@ const userModel = {
             loginTries: 0,
           },
         });
-        throw new Error(
-          'Usuário bloqueado por muitas tentativas de login. Tente novamente mais tarde.'
-        );
+
+        throw new Error('Usuário bloqueado por muitas tentativas. Tente mais tarde.');
       }
 
       throw new Error('Senha inválida.');
@@ -98,6 +108,8 @@ const userModel = {
     password: string | undefined,
     role: RoleType
   ) {
+    const before = await prisma.user.findUnique({ where: { id } });
+
     const dataToUpdate: any = { name, email, role };
 
     if (password && password.trim() !== '') {
@@ -105,14 +117,42 @@ const userModel = {
       dataToUpdate.password = hashedPassword;
     }
 
-    return await prisma.user.update({
+    const updated = await prisma.user.update({
       where: { id },
       data: dataToUpdate,
     });
+
+    await prisma.log.create({
+      data: {
+        action: 'UPDATE',
+        entity: 'USER',
+        entityId: id,
+        before: before ? JSON.parse(JSON.stringify(before)) : Prisma.DbNull,
+        after: JSON.parse(JSON.stringify(updated)),
+        userId: id,
+      },
+    });
+
+    return updated;
   },
 
   async delete(id: number) {
-    return await prisma.user.delete({ where: { id } });
+    const before = await prisma.user.findUnique({ where: { id } });
+
+    const deleted = await prisma.user.delete({ where: { id } });
+
+    await prisma.log.create({
+      data: {
+        action: 'DELETE',
+        entity: 'USER',
+        entityId: id,
+        before: before ? JSON.parse(JSON.stringify(before)) : Prisma.DbNull,
+        after: Prisma.DbNull,
+        userId: id,
+      },
+    });
+
+    return deleted;
   },
 
   async resetPassword({
@@ -124,29 +164,48 @@ const userModel = {
   }) {
     const user = await prisma.user.findUnique({ where: { email } });
 
-    if (!user) {
-      throw new Error('Usuário não encontrado.');
-    }
+    if (!user) throw new Error('Usuário não encontrado.');
 
     const hashedPassword = await bcrypt.hash(newPassword, 12);
 
-    await prisma.user.update({
+    const updated = await prisma.user.update({
       where: { email },
       data: { password: hashedPassword },
+    });
+
+    await prisma.log.create({
+      data: {
+        action: 'UPDATE',
+        entity: 'USER',
+        entityId: updated.id,
+        before: JSON.parse(JSON.stringify(user)),
+        after: JSON.parse(JSON.stringify(updated)),
+        userId: updated.id,
+      },
     });
 
     return { message: 'Senha atualizada com sucesso.' };
   },
 
-  async insertToken(
-    email: string,
-    resetPasswordToken: string,
-    resetTokenExpiry: Date
-  ) {
+  async insertToken(email: string, resetPasswordToken: string, resetTokenExpiry: Date) {
+    const before = await prisma.user.findUnique({ where: { email } });
+
     const user = await prisma.user.update({
       where: { email },
       data: { resetPasswordToken, resetTokenExpiry },
     });
+
+    await prisma.log.create({
+      data: {
+        action: 'UPDATE',
+        entity: 'USER',
+        entityId: user.id,
+        before: before ? JSON.parse(JSON.stringify(before)) : Prisma.DbNull,
+        after: JSON.parse(JSON.stringify(user)),
+        userId: user.id,
+      },
+    });
+
     return user;
   },
 
@@ -155,10 +214,7 @@ const userModel = {
       where: { resetPasswordToken: token },
     });
 
-    if (!user) {
-      throw new Error('Token inválido.');
-    }
-
+    if (!user) throw new Error('Token inválido.');
     if (!user.resetTokenExpiry || user.resetTokenExpiry < new Date()) {
       throw new Error('Token expirado.');
     }
@@ -167,10 +223,24 @@ const userModel = {
   },
 
   async expireToken(email: string) {
+    const before = await prisma.user.findUnique({ where: { email } });
+
     const user = await prisma.user.update({
       where: { email },
       data: { resetPasswordToken: null, resetTokenExpiry: null },
     });
+
+    await prisma.log.create({
+      data: {
+        action: 'UPDATE',
+        entity: 'USER',
+        entityId: user.id,
+        before: before ? JSON.parse(JSON.stringify(before)) : Prisma.DbNull,
+        after: JSON.parse(JSON.stringify(user)),
+        userId: user.id,
+      },
+    });
+
     return user;
   },
 };

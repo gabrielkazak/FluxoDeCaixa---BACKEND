@@ -67,3 +67,24 @@ enum ClassificacaoMovimentacao {
   GastoFixo
 }
 
+model Log {
+  id           Int       @id @default(autoincrement())
+  timestamp    DateTime  @default(now())
+  action       LogAction
+  entity       LogEntity
+  entityId     Int
+  before       Json?
+  after        Json?
+  userId       Int?     
+}
+
+enum LogAction {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+enum LogEntity {
+  USER
+  FLUXO_CAIXA
+}
