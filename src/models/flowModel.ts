@@ -1,9 +1,8 @@
 import prisma from '../database/prisma';
+import { Prisma } from '@prisma/client';
 
 type ClassificacaoMovimentacao = 'Venda' | 'Compra' | 'Investimento' | 'PrestacaoServico' | 'GastoFixo';
-
 type FormaPagamento = 'Dinheiro' | 'Cartao' | 'Pix';
-
 type TipoMovimentacao = 'Entrada' | 'Saida';
 
 interface FlowData {
@@ -23,39 +22,16 @@ const flowModel = {
   },
 
   async getAllByUserId(idUsuario: number) {
-    return await prisma.fluxoCaixa.findMany({
-      where: { idUsuario },
-    });
+    return await prisma.fluxoCaixa.findMany({ where: { idUsuario } });
   },
 
   async getById(id: number) {
-    return await prisma.fluxoCaixa.findUnique({
-      where: { id },
-    });
+    return await prisma.fluxoCaixa.findUnique({ where: { id } });
   },
 
   async getByDate(dataMovimentacao: Date) {
-    const startOfDay = new Date(
-      Date.UTC(
-        dataMovimentacao.getUTCFullYear(),
-        dataMovimentacao.getUTCMonth(),
-        dataMovimentacao.getUTCDate(),
-        0,
-        0,
-        0
-      )
-    );
-    const endOfDay = new Date(
-      Date.UTC(
-        dataMovimentacao.getUTCFullYear(),
-        dataMovimentacao.getUTCMonth(),
-        dataMovimentacao.getUTCDate(),
-        23,
-        59,
-        59,
-        999
-      )
-    );
+    const startOfDay = new Date(Date.UTC(dataMovimentacao.getUTCFullYear(), dataMovimentacao.getUTCMonth(), dataMovimentacao.getUTCDate(), 0, 0, 0));
+    const endOfDay = new Date(Date.UTC(dataMovimentacao.getUTCFullYear(), dataMovimentacao.getUTCMonth(), dataMovimentacao.getUTCDate(), 23, 59, 59, 999));
 
     return await prisma.fluxoCaixa.findMany({
       where: {
@@ -75,60 +51,62 @@ const flowModel = {
     return await prisma.saldoAtual.findMany();
   },
 
-  async create({
-    idUsuario,
-    tipo,
-    classificacao,
-    valor,
-    formaPagamento,
-    dataMovimentacao,
-    descricao,
-  }: FlowData) {
-    return await prisma.fluxoCaixa.create({
+  async create(data: FlowData) {
+    const created = await prisma.fluxoCaixa.create({ data });
+
+    await prisma.log.create({
       data: {
-        idUsuario,
-        tipo,
-        classificacao,
-        valor,
-        formaPagamento,
-        dataMovimentacao,
-        descricao,
+        action: 'CREATE',
+        entity: 'FLUXO_CAIXA',
+        entityId: created.id,
+        before: Prisma.DbNull,
+        after: JSON.parse(JSON.stringify(created)),
+        userId: data.idUsuario,
       },
     });
+
+    return created;
   },
 
-  async update(
-    id: number,
-    {
-      idUsuario,
-      tipo,
-      classificacao,
-      valor,
-      formaPagamento,
-      dataMovimentacao,
-      descricao,
-      alterado,
-    }: FlowData
-  ) {
-    return await prisma.fluxoCaixa.update({
+  async update(id: number, data: FlowData) {
+    const before = await prisma.fluxoCaixa.findUnique({ where: { id } });
+
+    const updated = await prisma.fluxoCaixa.update({
       where: { id },
+      data,
+    });
+
+    await prisma.log.create({
       data: {
-        idUsuario,
-        tipo,
-        classificacao,
-        valor,
-        formaPagamento,
-        dataMovimentacao,
-        descricao,
-        alterado,
+        action: 'UPDATE',
+        entity: 'FLUXO_CAIXA',
+        entityId: id,
+        before: before ? JSON.parse(JSON.stringify(before)) : Prisma.DbNull,
+        after: JSON.parse(JSON.stringify(updated)),
+        userId: data.idUsuario,
       },
     });
+
+    return updated;
   },
 
   async delete(id: number) {
-    return await prisma.fluxoCaixa.delete({
-      where: { id },
+    const before = await prisma.fluxoCaixa.findUnique({ where: { id } });
+
+    const deleted = await prisma.fluxoCaixa.delete({ where: { id } });
+
+    await prisma.log.create({
+      data: {
+        action: 'DELETE',
+        entity: 'FLUXO_CAIXA',
+        entityId: id,
+        before: before ? JSON.parse(JSON.stringify(before)) : Prisma.DbNull,
+        after: Prisma.DbNull,
+        userId: before?.idUsuario ?? null,
+      },
     });
+
+    return deleted;
   },
 };
 
